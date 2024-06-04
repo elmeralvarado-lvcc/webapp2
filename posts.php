@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,6 +37,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="posts-container">
         <h1>Posts Page</h1>
@@ -44,7 +46,7 @@
 </body>
 <script>
     // Posts Page
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         fetch("https://jsonplaceholder.typicode.com/posts")
             .then(response => response.json())
             .then(posts => {
@@ -55,10 +57,10 @@
                     const li = document.createElement("li");
                     li.textContent = post.title;
                     li.setAttribute("data-id", post.id);
-                    li.addEventListener("click", function() {
+                    li.addEventListener("click", function () {
                         const id = this.getAttribute("data-id");
                         // window.location.href = "post.html?id=" + id;
-                        window.location.href = `post.html?id=${id}`;
+                        window.location.href = `post.php?id=${id}`;
                     });
                     postLists.appendChild(li);
                 });
@@ -66,4 +68,5 @@
             .catch(error => console.error("Error fetching posts:", error));
     });
 </script>
+
 </html>
