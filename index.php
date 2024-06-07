@@ -9,22 +9,23 @@ try {
     $pdo = new PDO($dsn, $user, $password, $options);
 
     if ($pdo) {
-        // echo "Connected to the $db database successfully!";
-
-        // execute a query
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
-            $username = $_POST['username']; // Elmer
+            $username = $_POST['username'];
             $password = $_POST['password'];
 
             $query = "SELECT * FROM `users` WHERE username = :username";
             $statement = $pdo->prepare($query);
-            $statement->execute(['username' => $username]);
+            $statement->execute([':username' => $username]);
 
             $user = $statement->fetch(PDO::FETCH_ASSOC);
 
             if ($user) {
                 if ('secret123' === $password) {
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['username'] = $user['username'];
+
                     header("Location: posts.php");
+                    exit;
                 } else {
                     echo "Invalid password!";
                 }
