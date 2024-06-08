@@ -58,12 +58,29 @@
                 $pdo = new PDO($dsn, $user, $password, $options);
 
                 if ($pdo) {
-                    $query = "SELECT * FROM `posts`";
-                    $statement = $pdo->query($query);
-                    while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    $user_id = $_SESSION['user_id'];
+
+                    $query = "SELECT * FROM `posts` WHERE userId = :id";
+                    $statement = $pdo->prepare($query);
+                    $statement->execute([':id' => $user_id]);
+
+                    /*
+                     * First approach using fetchAll and foreach loop
+                     */
+                    $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                    foreach ($rows as $row) {
                         // echo '<li data-id="' . $row['id'] . '">' . $row['title'] . '</li>';
-                        echo '<li><a href="post.php?id=' . $row['id'] . '">' . $row['title'] . '</a></li>';
+                        echo '<li><a href="post.php?id=' . $row['id'] . '">' . $row['title'] . '</li>';
                     }
+
+                    /*
+                     * Second approach using fetch and while loop
+                     */
+                    // while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+                    // echo '<li data-id="' . $row['id'] . '">' . $row['title'] . '</li>';
+                    // echo '<li><a href="post.php?id=' . $row['id'] . '">' . $row['title'] . '</li>';
+                    // }
                 }
             } catch (PDOException $e) {
                 echo $e->getMessage();
